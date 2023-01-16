@@ -9,8 +9,7 @@ public final class AnvilRepair extends JavaPlugin {
 
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    private void registerListener(){
+
     }
 }
