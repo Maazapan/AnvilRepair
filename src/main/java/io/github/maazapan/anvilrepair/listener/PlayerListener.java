@@ -4,7 +4,7 @@ import de.tr7zw.changeme.nbtapi.NBTBlock;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.github.maazapan.anvilrepair.AnvilRepair;
 import io.github.maazapan.anvilrepair.manager.AnvilManager;
-import io.github.maazapan.anvilrepair.manager.EditingItem;
+import io.github.maazapan.anvilrepair.manager.editing.EditingItem;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -39,12 +39,13 @@ public class PlayerListener implements Listener {
             NBTBlock nbtBlock = new NBTBlock(event.getClickedBlock());
             ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-            if (nbtBlock.getData().hasTag("anvil-repair-block") && !nbtBlock.getData().getBoolean("anvil-repair-using")) {
-                if (itemStack.getType() == Material.AIR) return;
+            if (nbtBlock.getData().hasTag("anvil-repair-block")) {
+                event.setCancelled(true);
+
+                if (itemStack.getType() == Material.AIR && !nbtBlock.getData().getBoolean("anvil-repair-using")) return;
                 Damageable damageable = (Damageable) itemStack.getItemMeta();
                 AnvilManager anvilManager = plugin.getAnvilManager();
 
-                event.setCancelled(true);
 
                 if (damageable != null && damageable.hasDamage() && !anvilManager.isEditingItem(player)) {
                     anvilManager.sendAnimation(player, event.getClickedBlock(), itemStack);

@@ -18,7 +18,7 @@ public final class AnvilRepair extends JavaPlugin {
         this.saveDefaultConfig();
         this.registerListener();
         this.registerCommands();
-  //      this.registerHooks();
+        this.registerHooks();
     }
 
     private void registerCommands() {

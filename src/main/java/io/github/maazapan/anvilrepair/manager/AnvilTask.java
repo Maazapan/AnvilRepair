@@ -1,12 +1,10 @@
 package io.github.maazapan.anvilrepair.manager;
 
-import io.github.maazapan.anvilrepair.AnvilRepair;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class AnvilTask extends BukkitRunnable {

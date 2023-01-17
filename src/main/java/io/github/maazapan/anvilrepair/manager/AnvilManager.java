@@ -1,19 +1,16 @@
 package io.github.maazapan.anvilrepair.manager;
 
-import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTBlock;
 import io.github.maazapan.anvilrepair.AnvilRepair;
+import io.github.maazapan.anvilrepair.manager.editing.EditingItem;
 import io.github.maazapan.anvilrepair.manager.hook.VaultHook;
 import io.github.maazapan.anvilrepair.utils.KatsuUtils;
-import org.bukkit.Bukkit;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -38,10 +35,25 @@ public class AnvilManager {
      * @param itemStack ItemStack Item to repair
      */
     public void sendAnimation(Player player, Block block, ItemStack itemStack) {
+        FileConfiguration config = plugin.getConfig();
         NBTBlock nbtBlock = new NBTBlock(block);
+        Economy economy = VaultHook.getEconomy();
+
+        // Check player has money and if the player has permission bypass the cost.
+        if (economy != null) {
+            double cost = config.getDouble("cost");
+
+            if (!player.hasPermission("anvilrepair.bypass")) {
+                if (!economy.has(player, cost)) {
+                    player.sendMessage(KatsuUtils.coloredHex(config.getString("no-money")));
+                    return;
+                }
+                economy.withdrawPlayer(player, cost);
+            }
+        }
 
         nbtBlock.getData().setBoolean("anvil-repair-using", true);
-        player.getInventory().remove(itemStack);
+        player.getInventory().setItemInMainHand(null);
 
         // Spawn Custom drop item.
         Item dropItem = player.getWorld().dropItem(block.getLocation().add(+0.5, +1, +0.5), itemStack);
@@ -100,18 +112,4 @@ public class AnvilManager {
     public Map<UUID, EditingItem> getEditingItem() {
         return editingItemMap;
     }
-
-
-
-    /*
-            // Check player has money.
-        if (VaultHook.getEconomy() != null) {
-            double cost = config.getDouble("cost");
-
-            if (!player.hasPermission("anvilrepair.bypass") && !VaultHook.getEconomy().has(player, cost)) {
-                player.sendMessage(KatsuUtils.coloredHex(config.getString("no-money")));
-                return;
-            }
-        }
-     */
 }

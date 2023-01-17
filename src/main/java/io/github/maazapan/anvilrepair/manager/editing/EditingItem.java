@@ -1,4 +1,4 @@
-package io.github.maazapan.anvilrepair.manager;
+package io.github.maazapan.anvilrepair.manager.editing;
 
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
