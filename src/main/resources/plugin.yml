@@ -1,4 +1,7 @@
 name: AnvilRepair
 version: '${project.version}'
 main: io.github.maazapan.anvilrepair.AnvilRepair
-api-version: 1.18
+api-version: 1.16
+
+commands:
+  anvil:
